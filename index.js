@@ -75,11 +75,6 @@ app.get("/", function (req, res) {
   res.render("home.ejs");
 });
 
-
-app.get("/availability", function (req, res) {
-  res.render("blood_availability.ejs");
-});
-
 app.get("/about", function (req, res) {
   res.render("about.ejs");
 });
