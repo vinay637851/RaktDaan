@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Rakt Daan</title>
+    <link rel="shortcut icon" href="../blood.svg" type="image/x-icon">
+    <link rel="stylesheet" href="bank_dashboard.css">
+    <style>
+        /* General Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Container Layout */
+        .container {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f5f7;
+        }
+        .sidebar {
+            width: 250px;
+            background: #2a3e52;
+            padding: 20px;
+            color: #fff;
+        }
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #f9aa33;
+            font-weight: 600;
+            font-size: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li, .sidebar ul a li {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: #d1d9e6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar ul li:hover {
+            background-color: #f9aa33;
+            color: #2a3e52;
+        }
+        .sidebar ul a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 30px;
+        }
+        #dashboard h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+        .location {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .location i {
+            color: #f9aa33;
+            margin-right: 5px;
+        }
+
+        /* Overview Cards */
+        .dashboard-overview {
+            width: 100%;
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .overview_card{
+            display: flex;
+            justify-content: space-evenly;
+        } 
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            height: 20vh;
+            width: 20vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+        .card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 22px;
+            color: #f9aa33;
+            font-weight: bold;
+        }
+        .recent-updates ul {
+            list-style: none;
+            padding: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .recent-updates ul li {
+            margin: 5px 0;
+            color: #555;
+            text-align: left;
+        }
+        .recent-updates ul li:before {
+            content: "•";
+            color: #f9aa33;
+            padding-right: 8px;
+        }
+        .inventory_details{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            justify-content: baseline;
+            gap: 10vh;
+            overflow: auto;
+        }
+        h2{
+            color: #a93226;
+            transform: scale(1,1.1);
+        }
+        .inventory_details p{
+            color: gray;
+        }
+        .upcoming_detail{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: baseline;
+            gap: 10vh;
+            overflow: auto;
+        }
+        .repository_detail{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: baseline;
+            gap: 10vh;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Blood Bank Dashboard</h3>
+            <ul>
+                <li onclick="showSection('dashboard')">Dashboard</li>
+                <li onclick="showSection('blood-inventory')">Blood Inventory</li>
+                <li onclick="showSection('upcoming-donation')">Upcoming Donation</li>
+                <li onclick="showSection('donation-repository')">Donor Request</li>
+                <li onclick="showSection('profile')">Profile</li>
+                <li onclick="showSection('reports')">Reports</li>
+                <a href="/user/logout"><li>Logout</li></a>
+            </ul>
+        </div>
+        <div class="content">
+            <section id="dashboard" class="active">
+                <div class="dashboard_deatils">
+                    <div class="dashboard_nav">
+                        <h2><%=bankdata.Blood_Bank_Name%></h2>
+                        <p>Address : <%=bankdata.Address%></p>
+                        <div class="nav_heading">
+                            <p>Licence No. <%=bankdata.Licence_No%></p>
+                            <p id="last_login"></p>
+                        </div>
+                    </div>
+                    <div class="dashboard-overview">
+                        <div class="overview_card">
+                            <div class="card">
+                                <h3>Total Blood Units</h3>
+                                <p id="total-blood-units">---</p>
+                            </div>
+                            <div class="card">
+                                <h3>Upcoming Donations</h3>
+                                <p id="upcoming-donations">---</p>
+                            </div>
+                        </div>
+                        <div class="overview_card">
+                            <div class="card">
+                                <h3>Pending Requests</h3>
+                                <p id="pending-requests">---</p>
+                            </div>
+                            <div class="card">
+                                <h3>Recent Updates</h3>
+                                <ul id="recent-updates">
+                                    <li>No recent updates.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="blood-inventory">
+                <div class="inventory_details">
+                    <div>
+                        <h2>Blood Inventory</h2>
+                        <p>Blood dtock details.</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Blood Type</th>
+                                <th>Available Units</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="upcoming-donation">
+                <div class="upcoming_detail">
+                    <h2>Approved Donation Request List</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Donor Id</th>
+                                <th>Name</th>
+                                <th>Blood Group</th>
+                                <th>Email</th>
+                                <th>Aadhar No.</th>
+                                <th>Donation Date</th>
+                                <th>Donation Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="donation-repository">
+                <div class="repository_detail">
+                    <h2>Donation Requests</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Donor Id</th>
+                                <th>Donor Name</th>
+                                <th>Blood Type</th>
+                                <th>Email</th>
+                                <th>Request Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="profile">
+                <form action="/bank/dashboard/update/<%=bankdata.bank_id%>" id="update_profile" method="post">
+                    <label for="Email">Email <br><br>
+                        <input type="text" name="Email" value="<%=bankdata.Email%>" required>
+                    </label>
+                    <label for="name">Name <br> <br>
+                        <input type="text" name="Blood_Bank_Name" value="<%=bankdata.Blood_Bank_Name%>" required autocomplete="none">
+                    </label>
+                    <label for="age">Parent Hospital Name <br><br>
+                        <input type="text" name="Hospital_Name" value="<%=bankdata.Hospital_Name%>" required autocomplete="none">
+                    </label>
+                    <label for="age">Moblie No. <br><br>
+                        <input type="text" name="Contact_No" value="<%=bankdata.Contact_No%>" maxlength="10" required autocomplete="none">
+                    </label>
+                    <label for="address">Address <br><br>
+                        <input type="text" name="Address" value="<%=bankdata.Address%>" required autocomplete="none">
+                    </label><br>
+                    <span><label for="">Change Password</label> <i class="fa-solid fa-toggle-off" onclick="change()"></i></span>
+                    <div class="password_box" id="password_active">
+                        <label for="password">
+                            <input type="text" id="password" name="password"  placeholder="Enter new Password" autocomplete="none">
+                        </label><br><br>
+                        <label for="confrim_password">
+                            <input type="text" id="comfirm_password" name="re_password" placeholder="Comfirm password" autocomplete="none">
+                        </label>
+                    </div>
+                    <button class="accept-button">Update Profile</button>
+                </form>
+            </section>
+            <section id="reports">
+                hello
+            </section>
+        </div>
+    </div>
+    <script>
+        let date=new Date();
+        document.getElementById('last_login').innerHTML ="Last Login : "+ date.toDateString()+" "+date.toTimeString().toString().substring(0,8);
+        let donation=<%-JSON.stringify(donationdata||[])%>;
+        let donor=<%-JSON.stringify(donordata||[])%>;
+        let bank=<%-JSON.stringify(bankdata||{})%>;
+        let inventory=<%-JSON.stringify(bloodInventory||[])%>;
+        for(let key in inventory){
+            let row=document.createElement('tr');
+            let cell=document.createElement('td');
+            cell.textContent=key;
+            row.appendChild(cell);
+            cell=document.createElement('td');
+            cell.textContent=inventory[key];
+            row.appendChild(cell);
+            cell=document.createElement('td');
+            cell.textContent=date.toLocaleString();
+            row.appendChild(cell);
+            document.querySelector("#blood-inventory tbody").appendChild(row);
+        }
+        for(let i=0;i<donation.length;i++){
+            if(donation[i]['status']=='pending'){
+                for(let j=0;j<donor.length;j++){
+                    if(donation[i].donor_id==donor[j].id){
+                        let row=document.createElement('tr');
+                        for(let key in donor[j]){
+                            if(key=='id'||key=='name'||key=='bloodgroup'||key=='email'){
+                                let cell=document.createElement('td');
+                                cell.textContent=donor[j][key];
+                                row.appendChild(cell);
+                            }
+                        }
+                        for(let key in donation[i]){
+                            if(key=='application_date'||key=='status'){
+                                let cell=document.createElement('td');
+                                if(key=='application_date')
+                                    cell.textContent=donation[i][key].toString().substring(0,10);
+                                else
+                                    cell.textContent=donation[i][key];
+                                row.appendChild(cell);
+                            }
+                        }
+                        let btn1=document.createElement('button');
+                        btn1.classList.add('accept-button');
+                        btn1.innerHTML = 'Accept';
+                        btn1.onclick=function(e){
+                            if(confirm('Are you sure, you want to accept this donation request?'))
+                            {
+                                let row=document.createElement('tr');
+                                let cell=document.createElement('td');
+                                cell.colSpan=7;
+                                let form=document.createElement('form');
+                                form.action=`/bank/donation/approve/${donation[i]['id']}`;
+                                form.method='POST';
+                                form.classList.add('cell_input');
+                                let dateinput=document.createElement('input');
+                                dateinput.type='date';
+                                dateinput.min=`${date.toISOString().substring(0,10)}`;
+                                dateinput.name='donation_date';
+                                dateinput.required = true;
+                                form.appendChild(dateinput);
+                                let timeinput=document.createElement('input');
+                                timeinput.type='time';
+                                timeinput.name='donation_time';
+                                timeinput.required = true;
+                                form.appendChild(timeinput);
+                                let btn=document.createElement('button');
+                                btn.classList.add('button');
+                                btn.type='submit'
+                                btn.innerText='Send Approval';
+                                btn.onclick=function(){
+                                    form.addEventListener('submit',function(e){
+                                        e.preventDefault();
+                                        if(confirm('Are you sure, you want to approve donor for donation ?'))
+                                            form.submit();
+                                    })
+                                }
+                                form.appendChild(btn);
+                                cell.appendChild(form);
+                                row.appendChild(cell);
+                                e.target.parentNode.parentNode.insertAdjacentElement('afterend', row);
+                                e.target.style.pointerEvents ='none';
+                                e.target.style.filter='blur(1px)';
+                            }
+                        }
+                        let btn2=document.createElement('button');
+                        btn2.classList.add('reject-button');
+                        btn2.innerHTML = 'Reject';
+                        btn2.onclick=function(){
+                            if(confirm('Are you sure, you want to reject this donation request?'))
+                                window.location.href = `/bank/dashboard/donation_history/reject_donor/${donation[i]['id']}`;
+                        }
+                        let cell=document.createElement('td');
+                        cell.appendChild(btn1);
+                        cell.appendChild(btn2);
+                        row.appendChild(cell);
+                        document.querySelector('#donation-repository tbody').appendChild(row);
+                    }
+                }
+            }
+            if(donation[i]['status']=='approved'){
+                for(let j=0;j<donor.length;j++){
+                    if(donation[i]['donor_id']==donor[j]['id']){
+                        let row=document.createElement('tr');
+                        for(let key in donor[j]){
+                            if(key=='id'||key=='name'||key=='aadhar'||key=='email'){
+                                let cell=document.createElement('td');
+                                cell.textContent=donor[j][key];
+                                row.appendChild(cell);
+                            }
+                            if(key=='bloodgroup'){
+                                let cell=document.createElement('td');
+                                let itag=document.createElement('i');
+                                itag.classList.add("fa-solid");
+                                itag.classList.add('fa-pen-to-square')
+                                cell.classList.add('edit_blood');
+                                cell.innerHTML=donor[j][key];
+                                cell.appendChild(itag);
+                                itag.onclick=function(e){
+                                     if(confirm('Are you sure, you want to edit blood group?')){
+                                        let parent=e;
+                                        let select=document.createElement('select');
+                                        let span=document.createElement('span');
+                                        span.classList.add('cell_input');
+                                        let row=document.createElement('tr');
+                                        let cell = document.createElement('td');
+                                        let option=document.createElement('option');
+                                        option.value='A+';
+                                        option.text='A+';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='A-';
+                                        option.text='A-';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='B+';
+                                        option.text='B+';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='B-';
+                                        option.text='B-';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='AB+';
+                                        option.text='AB+';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='AB-';
+                                        option.text='AB-';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='O+';
+                                        option.text='O+';
+                                        select.appendChild(option);
+                                        option=document.createElement('option');
+                                        option.value='O-';
+                                        option.text='O-';
+                                        select.appendChild(option);
+                                        cell.colSpan='8';
+                                        let btn=document.createElement('button');
+                                        let btn2=document.createElement('button');
+                                        btn.classList.add('button');
+                                        btn.innerHTML='Update';
+                                        btn2.classList.add('reject-button');
+                                        btn2.innerHTML = 'Cancel';
+                                        btn.onclick=function(e){
+                                            if(confirm('Are you sure you want update blood group information ?')){
+                                                e.target.parentNode.parentNode.parentNode.remove();
+                                                window.location.href=`/bank/dashboard/update_blood_group/${donor[j]['id']}/${select.value}`
+                                                parent.target.style.pointerEvents ='all';
+                                                parent.target.style.filter='blur(0px)';
+                                            }
+                                        }
+                                        btn2.onclick=function(e){
+                                            e.target.parentNode.parentNode.parentNode.remove();
+                                            parent.target.style.pointerEvents ='all';
+                                            parent.target.style.filter='blur(0px)';
+                                        }
+                                        span.appendChild(select);
+                                        span.appendChild(btn);
+                                        span.appendChild(btn2);
+                                        cell.appendChild(span)
+                                        row.appendChild(cell);
+                                        e.target.parentNode.parentNode.insertAdjacentElement('afterend', row);
+                                        e.target.style.pointerEvents ='none';
+                                        e.target.style.filter='blur(1px)';
+                                    } 
+                                }
+                                row.appendChild(cell);
+                            }
+                        }
+                        for(let key in donation[i]){
+                            if(key=='donation_date'||key=='donation_time'){
+                                let cell=document.createElement('td');
+                                cell.textContent=donation[i][key].toString().substring(0,10);
+                                row.appendChild(cell);
+                            }
+                        }
+                        let btn=document.createElement('button');
+                        let cell=document.createElement('td');
+                        btn.classList.add('button');
+                        btn.innerHTML = 'Complete';
+                        btn.onclick=function(){
+                            if(confirm('Are you sure, you want to complete this donation?'))
+                                window.location.href=`/bank/dashboard/donation_history/${donation[i]['id']}/${bank['bank_id']}/${donor[j]['id']}`
+                        }
+                        let btn2=document.createElement('button');
+                        btn2.classList.add('reject-button');
+                        btn2.innerHTML = 'Cancel';
+                        btn2.onclick=function(){
+                            if(confirm('Are you sure, you want to reject this donation?'))
+                                console.log("yes reject")
+                        }
+                        cell.appendChild(btn);
+                        cell.appendChild(btn2);
+                        cell.classList.add('cell_Action')
+                        row.appendChild(cell);
+                        document.querySelector('#upcoming-donation tbody').appendChild(row);
+                    }
+                }
+            }
+        }
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+        function change() {
+            let classdata=document.getElementsByClassName('fa-solid')[0].classList;
+            classdata.toggle('fa-toggle-on');
+            classdata.toggle('fa-toggle-off');
+            document.getElementById('password_active').classList.toggle('password_box')
+        }
+        document.getElementById('update_profile').addEventListener('submit',function(e){
+            e.preventDefault();
+            if(password.value!=comfirm_password.value){
+                alert('Password and Comfirm Password do not match');
+                return;
+            }
+            let con=confirm("Are you sure you want to proceed?");
+            if(con)
+                this.submit();
+            else
+                return
+            //code to update profile
+        })  
+        document.addEventListener("DOMContentLoaded", function () {
+            // Display dynamic values from data
+            document.getElementById("total-blood-units").textContent = Object.values(inventory).reduce((a, b) => a + b, 0) + " units";
+            document.getElementById("upcoming-donations").textContent = donation.filter(d => d.status === "approved").length;
+            document.getElementById("pending-requests").textContent = donation.filter(d => d.status === "pending").length;
+            
+            // Populate recent updates
+            let updates = ["Inventory updated", "New donation request", "Profile updated"];
+            let recentUpdates = document.getElementById("recent-updates");
+            recentUpdates.innerHTML = updates.map(update => `<li>${update}</li>`).join("");
+        });
+    </script>
+</body>
+</html>

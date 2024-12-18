@@ -1,0 +1,307 @@
+<title>Rakt Daan</title>
+<link rel="shortcut icon" href="../blood.svg" type="image/x-icon">
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;;
+    }
+    .conatiner{
+        width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f4f4f4;
+    }
+    .admin_box{
+        padding: 5vh 5vh;
+        width: 95vw;
+        height: 90vh;
+        overflow: auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 4vh;
+        justify-content: baseline;
+        background-color: white;
+        align-items: center;
+    }
+    .admin_box h2{
+        color: #BF222B;
+        word-spacing: 1vw;
+        letter-spacing: 3px;
+        text-decoration: underline;
+    }
+    .nav_box {
+        display: flex;
+        width: 90vw;
+        gap: 4vh;
+        justify-content: baseline; /* Space out the items */
+        background-color: #007BFF; /* Primary blue color */
+        border-radius: 8px; /* Rounded corners */
+        padding:10px 4vh; /* Padding for top and bottom */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+        margin-bottom: 20px; /* Space below the nav */
+    }
+    
+    .nav_item {
+        color: white; /* Text color */
+        font-size: 18px;
+        width: 20vw;
+        text-align: center; 
+        cursor: pointer;
+        padding: 10px 20px; 
+        transition: background-color 0.3s; 
+        border-radius: 5px; 
+    }
+    .nav_hover1{
+        background-color: #0056b3;
+    }
+    .nav_item:hover {
+        background-color: #0056b3; 
+    }
+    .nav_item_self{
+        align-self: flex-end;
+    }
+    .details{
+        width: 90vw;
+        height: 60vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+    .blood_details,.camp_details{
+        width: 90vw;
+        height:max-content;
+        overflow-x: hidden;
+        position: absolute;
+        background-color: white;
+    }
+    .blood_details{
+        z-index: 0;
+    }
+    .camp_details{
+        z-index: -1;
+    }
+    .details table{
+        width: 90vw;
+    }
+    .details thead{
+        position: sticky;
+        top:0vh;
+    }
+    .details th{
+        background-color: #BF222B;
+        width: 80vw;
+        color: white;
+        height: 6vh;
+    }
+    .details td{
+        height: 7vh;
+        background-color:  #d0e9f9;
+        color: #333;
+        text-align: center;
+    }
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Space between buttons */
+    }
+
+    .accept-button {
+        background-color: #28a745; /* Green for Accept */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .reject-button {
+        background-color: #dc3545; /* Red for Reject */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Optional: Change color on hover */
+    .accept-button:hover {
+        background-color: #218838; /* Darker green */
+    }
+
+    .reject-button:hover {
+        background-color: #c82333; /* Darker red */
+    }
+    ::-webkit-scrollbar{
+        background-color: lightgray;
+        width: 0.7vw;
+        border-radius: 15px;
+    }
+    ::-webkit-scrollbar-thumb{
+        background-color: grey;
+        border-radius: 15px;
+        border: 1px solid darkgray;
+    }
+</style>
+<div class="conatiner">
+    <div class="admin_box">
+        <div class="nav_item_self"><a href="/user/logout"><button class="reject-button">Log Out</button></a></div>
+        <h2>Admin Dashboard</h2>
+        
+        <div class="nav_box">
+            <div class="nav_item nav_hover1" onclick="first()">Blood Bank Applications</div>
+            <div class="nav_item nav_hover2" onclick="second()">Camp Applications</div>
+        </div>
+        <div class="details">
+            <div class="blood_details">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bank ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Email</th>
+                            <th>Licence No</th>
+                            <th>License Issue</th>
+                            <th>License Expiry</th>
+                            <th>State</th>
+                            <th>District</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="10">No more Blood Bank request are here.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="camp_details">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Camp ID</th>
+                            <th>Category</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Address</th>
+                            <th>State</th>
+                            <th>District</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="10">No more Blood Camp request are here.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let data=<%- JSON.stringify(bankdetails||[])%>;
+    if(data.length>0)
+     document.querySelector('.blood_details table tbody').innerHTML='';
+    for(let i=0;i<data.length;i++){
+        if(data[i]['Action']=='N/A'){
+            let row = document.createElement('tr');
+            for(let key in data[i]){
+                if(key=='bank_id'||key=='Blood_Bank_Name'||key=='Category'||key=='state'||key=='district'||key=='Email'||key=='Licence_No'||key=='License_Issue'||key=='License_Expiry'){
+                    let cell = document.createElement('td');
+                    if(key=='License_Issue'||key=='License_Expiry')
+                        cell.textContent = data[i][key].substring(0,10);
+                    else    
+                        cell.textContent = data[i][key]  
+                    row.appendChild(cell);
+                }
+            }
+            let cell=document.createElement('td');
+            let divs=document.createElement('div');
+            divs.className='button-container';
+            let btn1=document.createElement('button');
+            btn1.className='accept-button';
+            btn1.innerHTML="Accept";
+            btn1.onclick=function() {
+                if(confirm('Are you sure, you want to accept this blood bank request?'))
+                    window.location.href = `/admin/acceptBloodBank/${data[i]['bank_id']}`
+            }
+            let btn2=document.createElement('button');
+            btn2.className='reject-button';
+            btn2.innerHTML="Reject";
+            btn2.onclick=function() {
+                if(confirm('Are you sure, you want to reject this blood bank request?'))
+                    window.location.href = `/admin/rejectBloodCamp/${data[i]['bank_id']}`
+            }
+            divs.appendChild(btn1);
+            divs.appendChild(btn2);
+            cell.appendChild(divs);
+            row.appendChild(cell);
+            document.querySelector('.blood_details table tbody').appendChild(row);
+        }
+    }
+    let campdata=<%- JSON.stringify(campdetails||[])%>;
+    if(campdata.length>0)
+        document.querySelector('.camp_details table tbody').innerHTML='';
+    for(let i=0;i<campdata.length;i++){
+        if(campdata[i]['action']=='N/A'){
+            let row = document.createElement('tr');
+            for(let key in campdata[i]){
+                if(key=='camp_id'||key=='organization_type'||key=='camp_name'||key=='state'||key=='camp_date'||key=='district'||key=='camp_address'||key=='organizer_email_id'||key=='start_time'||key=='end_time'){
+                    let cell = document.createElement('td');
+                    if(key=='camp_date')
+                        cell.textContent = campdata[i][key].substring(0,10);
+                    else    
+                        cell.textContent = campdata[i][key]  
+                    row.appendChild(cell);
+                }
+            }
+            let cell=document.createElement('td');
+            let divs=document.createElement('div');
+            divs.className='button-container';
+            let btn1=document.createElement('button');
+            btn1.className='accept-button';
+            btn1.innerHTML="Accept";
+            btn1.onclick=function(){
+                if(confirm('Are you sure, you want to accept this blood camp request?'))
+                    window.location.href = `/admin/acceptCamp/${campdata[i]['camp_id']}`;
+            }
+            let btn2=document.createElement('button');
+            btn2.className='reject-button';
+            btn2.innerHTML="Reject";
+            btn2.onclick=function(){
+                if(confirm('Are you sure, you want to reject this blood camp request?'))
+                    window.location.href = `/admin/rejectCamp/${campdata[i]['camp_id']}`;
+            }
+            divs.appendChild(btn1);
+            divs.appendChild(btn2);
+            cell.appendChild(divs);
+            row.appendChild(cell);
+            document.querySelector('.camp_details table tbody').appendChild(row);
+        }
+    }
+    function first() {
+        document.querySelector('.blood_details').style.zIndex = 0;
+        document.querySelector('.camp_details').style.zIndex = -1;
+        document.getElementsByClassName('nav_hover1')[0].style.backgroundColor ='#0056b3';
+        document.getElementsByClassName('nav_hover2')[0].style.backgroundColor ='#007BFF';
+    }
+    function second() {
+        document.querySelector('.blood_details').style.zIndex = -1;
+        document.querySelector('.camp_details').style.zIndex = 0;
+        document.getElementsByClassName('nav_hover2')[0].style.backgroundColor ='#0056b3';
+        document.getElementsByClassName('nav_hover1')[0].style.backgroundColor ='#007BFF';
+    }
+</script>
