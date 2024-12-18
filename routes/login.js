@@ -46,8 +46,9 @@ router.get("/",function(req,res){
 })
 
 router.get("/login", function (req, res) {
-    console.log(req.user.role);
-    if (req.isAuthenticated()&& req.user.role === 'donor') 
+    if(!req.user)
+        res.render("login.ejs")
+    else if (req.isAuthenticated()&& req.user.role === 'donor') 
         res.redirect('/donor/dashboard')
     else if(req.isAuthenticated()&& req.user.role === 'admin')
         res.redirect('/admin/dashboard')
