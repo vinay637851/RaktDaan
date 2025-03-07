@@ -66,7 +66,7 @@ router.get("/dashboard",async function(req,res){
             let date=new Date();
             for(let i = 0; i <donate_history.length;i++){
                 for(let key in bloodInventory){
-                    if(donate_history[i]['blood_group']===key&&donate_history[i]['expiry_date']>date)
+                    if(donate_history[i]['blood_group']===key&&donate_history[i]['expiry_date']>date&&donate_history[i]['status']=='not issue')
                         bloodInventory[key]++;
                 }
             }
@@ -206,7 +206,7 @@ router.get("/dashboard/donation_history/:donation_id/:bank_id/:donor_id",async f
             if(err)
                 throw err;
         })
-        sql ='update donation set blood_type =?, status ="completed" where id =?'
+        sql =`update donation set blood_type =?, status ='completed' where id =?`
         connection.query(sql,[donor_data['bloodgroup'],donation_id],function(err,result){
             if(err)
                 throw err;
@@ -238,7 +238,7 @@ router.get("/dashboard/donation_history/:donation_id/:bank_id/:donor_id",async f
 router.get("/dashboard/donation_history/reject_donor/:donation_id",function(req, res){
     try{
         let donation_id=req.params.donation_id;
-        let sql=`update donation set status="rejected" where id =?`;
+        let sql=`update donation set status='rejected' where id =?`;
         connection.query(sql,[donation_id],function(err,result){
             if(err) throw err;
         });
@@ -249,6 +249,56 @@ router.get("/dashboard/donation_history/reject_donor/:donation_id",function(req,
         res.redirect("/bank/dashboard")
     }
 
+})
+
+router.post("/recipient/:bank_id/:blood_group/:quantity",async function(req,res){
+    try{
+        let {bank_id,blood_group, quantity} = req.params;
+        let {name,age,email,contact_no,aadhar,gender,address,pin}=req.body;
+        let sql=`insert into recipient (bank_id,name,age,blood_group,quantity,email,contact_no,aadhar,gender,address,pin) values (?,?,?,?,?,?,?,?,?,?,?)`;
+        let recipient_id=await new Promise((resolve,reject) =>{
+            connection.query(sql,[bank_id,name,age,blood_group,quantity,email,contact_no,aadhar,gender,address,pin],function(err,result){
+                if(err) 
+                    reject(err);
+                else
+                resolve(result.insertId);
+            })
+        })
+        
+        res.redirect(`/bank/recipient/inventory/${bank_id}/${recipient_id}/${quantity}`);
+    }
+    catch(err){
+        console.log("Error in recipient table ");
+        res.redirect("/bank/dashboard");
+    }
+})
+router.get("/recipient/inventory/:bankId/:recipientId/:quantity",async function(req,res){
+    try{
+        let {bankId, recipientId,quantity} = req.params;
+        let sql=`select * from donation_history where bank_id = ? and status='not issue'`;
+        let donation_history=await new Promise(function(resolve, reject) {
+            connection.query(sql,[bankId],function(err,result){
+                if(err)
+                    reject(err);
+                else
+                    resolve(result);
+            })
+        });
+        for(let i=0;i<quantity;i++){
+            let id=donation_history[i]['id'];
+            sql=`update donation_history set status='issue', recipient_id =? ,issue_date = ? where id = ?`;
+            let issue_date=new Date();
+            connection.query(sql,[recipientId,issue_date,id],function(err,result){
+                if(err)
+                    throw err;
+            });
+        }
+        res.redirect("/bank/dashboard");
+    }
+    catch(err){
+        console.log("Error in recipient inventory",err);
+        res.redirect(`/bank/dashboard`);
+    }
 })
 
 module.exports = router;

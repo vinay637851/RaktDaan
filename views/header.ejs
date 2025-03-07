@@ -11,13 +11,13 @@
 <div class="nav">
     <div class="logo">
         <img src="../blood.svg" alt="">
-        <p id="para">Rakt Daan</p>
+        <p id="para">RaktDaan</p>
     </div>
     <div class="nav_title">
         <div class="title_part title_main">
             <div class="title_container">
                 <p>Dashboard</p>
-                <i class="fa-solid fa-caret-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </div>
             <ul> 
                 <a href="/"><li>Home</li></a>
@@ -29,7 +29,7 @@
         <div class="title_part">
             <div class="title_container">
                 <p>Search Blood</p>
-                <i class="fa-solid fa-caret-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </div>
             <ul>
                 <a href="/availability/dashboard"><li>Blood Availability</li></a>
@@ -38,7 +38,7 @@
         <div class="title_part">
             <div class="title_container">
                 <p>donate blood</p>
-                <i class="fa-solid fa-caret-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </div>
             <ul>
                 <a href="/user/login"><li>Donor Dashboard</li></a>
@@ -47,7 +47,7 @@
         <div class="title_part">
             <div class="title_container">
                 <p>Blood Camp</p>
-                <i class="fa-solid fa-caret-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </div>
             <ul>
                 <a href="/camp/searchCamp"><li>Search Donation Camp</li></a>    
@@ -57,15 +57,32 @@
         <div class="title_part">
             <div class="title_container">
                 <p>blood bank</p>
-                <i class="fa-solid fa-caret-down"></i>
+                <i class="fa-solid fa-chevron-down"></i>
             </div>
             <ul>
                 <a href="/user/login"><li>Blood Bank Dashboard</li></a>
                 <a href="/bank/Registration"><li>Register Blood Bank</li></a>
             </ul>
-        </div>&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="login_part">
-            <a href="/user"><button class="header-login-btn">Login</button></a>
         </div>
     </div>
+    <div class="login_part">
+        <i class="fa-solid fa-bars" onclick="navbar()"></i>
+        <a href="/user"><button class="header-login-btn">Login</button></a>
+    </div>
 </div>
+<script>
+    function navbar() {
+        document.querySelector('.nav_title').classList.toggle('show');
+        document.querySelector('.fa-bars').classList.toggle('fa-xmark');
+    }
+    function handleResize() {
+        const mediaQuery = window.matchMedia("(min-width: 1000px)");
+        
+        if (mediaQuery.matches) {
+            document.querySelector('.nav_title').classList.remove('show');
+            document.querySelector('.fa-bars').classList.remove('fa-xmark');
+        }
+    }
+    window.addEventListener('resize', handleResize);
+   
+</script>

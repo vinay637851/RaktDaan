@@ -67,12 +67,12 @@ router.post("/signup",async function(req,res){
 router.get('/acceptBloodBank/:bank_id',async function(req,res){
     try{
         let bank_id=req.params.bank_id;
-        let sql='UPDATE bank SET Action="accepted" WHERE bank_id=?';
+        let sql=`UPDATE bank SET Action='accepted' WHERE bank_id=?`;
         connection.query(sql,[bank_id],function(err,result){
             if(err){
                 throw err;
             }
-        });
+        }); 
         sql='insert into bank_admin (username,password,bank_id) values (?,?,?)';
         let password=await bcrypt.hash('123',10);
         let query=await new Promise(function(resolve, reject){

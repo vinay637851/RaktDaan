@@ -47,6 +47,7 @@ router.get("/dashboard",async function (req, res) {
                     else resolve(result);  // Resolve with the result
                 });
             })
+            console.log(donationData)
         }
         catch(err){
             console.log("error on donation table on donor dashboard",err);

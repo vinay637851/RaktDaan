@@ -73,7 +73,7 @@ td{
     color: #333;
     text-align: center;
 }
-#dashboard,#donation-repository,#profile,#blood-inventory,#report,#upcoming-donation,#reports{
+#dashboard,#donation-repository,#profile,#blood-inventory,#report,#upcoming-donation,#reports,#issue-blood{
     height: 100%;
     background-color: white;
     padding: 2vh;
@@ -153,7 +153,7 @@ form{
 #profile form{
     flex-direction: column;
 }
-span{
+#profile span{
     height: 5vh;
     width: 15vw;
     display: flex;
@@ -176,7 +176,7 @@ span{
 .password_box{
     display: none;
 }
-.fa-solid{
+#profile .fa-solid{
     color: #007BFF;
     transform: scale(2,2);
 }
@@ -229,4 +229,11 @@ select:focus {
     flex-direction: column;
     justify-content: space-between;
 }
-
+#issue-blood .blood_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}

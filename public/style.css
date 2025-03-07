@@ -78,7 +78,7 @@
 .table_img img{
     width: 50vw;
     height: 60vh;
-    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.717));
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.197);
 }
 .table_img p{
     width: 100%;

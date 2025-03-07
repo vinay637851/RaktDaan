@@ -164,6 +164,94 @@
             gap: 10vh;
             overflow: auto;
         }
+        .check_availability{
+            height:max-content;
+            gap: 5vh;
+            width: 50vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            position: absolute;
+        }
+        .recipient_information{
+            display: flex;
+            height:max-content;
+            gap: 5vh;
+            width: 65vw;
+            flex-direction: column;
+            align-items: center;
+            visibility: hidden;
+            position: absolute;
+        }
+        .recipient_information div{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .recipient_information button{
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        .recipient_information span{
+            color: #666;
+            cursor: pointer;
+        }
+        .blood_part{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .blood_container form{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: max-content;
+        }
+        .blood_container form label{
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+            color: #444;
+            font-size: 14px;
+        }
+        .blood_container form input,.blood_container form select{
+            width: 30vw;
+            padding: 0rem 0.5rem;
+        }
+        .blood_container form select{
+            color: #666;
+        }
+        .blood_info{
+            display: none;
+            padding: 0.3rem 1rem;
+            width: 30vw;
+            font-size: 12px;
+            flex-direction: column;
+            gap: 2vh;
+            height: max-content;    
+        }
+        .blood_info_available{
+            background-color: rgba(144, 238, 144, 0.3);
+            color: green;
+        }
+        .blood_info_unavailable{
+            background-color: rgba(240, 128, 128, 0.3);
+            color: red;
+        }
+        .check_button{
+            width: 30vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .check_button .accept-button{
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .process_btn{
+            cursor:not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -171,12 +259,12 @@
         <div class="sidebar">
             <h3>Blood Bank Dashboard</h3>
             <ul>
-                <li onclick="showSection('dashboard')">Dashboard</li>
+                <li onclick="showSection('dashboard')">Home</li>
                 <li onclick="showSection('blood-inventory')">Blood Inventory</li>
                 <li onclick="showSection('upcoming-donation')">Upcoming Donation</li>
                 <li onclick="showSection('donation-repository')">Donor Request</li>
+                <li onclick="showSection('issue-blood')">Issue Blood</li>
                 <li onclick="showSection('profile')">Profile</li>
-                <li onclick="showSection('reports')">Reports</li>
                 <a href="/user/logout"><li>Logout</li></a>
             </ul>
         </div>
@@ -195,17 +283,17 @@
                         <div class="overview_card">
                             <div class="card">
                                 <h3>Total Blood Units</h3>
-                                <p id="total-blood-units">---</p>
+                                <p id="total-blood-units"></p>
                             </div>
                             <div class="card">
                                 <h3>Upcoming Donations</h3>
-                                <p id="upcoming-donations">---</p>
+                                <p id="upcoming-donations"></p>
                             </div>
                         </div>
                         <div class="overview_card">
                             <div class="card">
                                 <h3>Pending Requests</h3>
-                                <p id="pending-requests">---</p>
+                                <p id="pending-requests"></p>
                             </div>
                             <div class="card">
                                 <h3>Recent Updates</h3>
@@ -280,6 +368,84 @@
                     </table>
                 </div>
             </section>
+            <section id="issue-blood">
+                <div class="blood_container">
+                    <div class="check_availability">
+                        <h2>Check Blood Availability</h2>
+                        <form action="" id="blood_check">
+                                <label for="blood_type">Blood Type 
+                                    <select name="blood_type" id="blood_type" required>
+                                        <option value="">Select Blood Type</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                    </select>
+                                </label>
+                                <label for="quantity">Unit Required
+                                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" required>
+                                </label>
+                            <div class="blood_info"></div>
+                            <div class="check_button">
+                                <button  type="submit" class="reject-button">Check availability</button>
+                                <div class="process_btn">
+                                    <button onclick="show_recepient(this)" class="accept-button">Process Request</button>
+                                </div>
+                            </div>
+                        </form>                                 
+                    </div>
+                    <div class="recipient_information">
+                        <div ><h2>Recipient Details</h2>
+                            <span onclick="check_blood_back()"><i class="fa-solid fa-arrow-left"></i> back</span>
+                        </div>
+                        <p style="color: #888;">Fill out this form to issue blood to recipient.</p>
+                        <form id="recipient_detail" method="post">
+                            <div class="blood_part">
+                                <label for="recipientName">Recipient Name 
+                                    <input type="text" name="name" placeholder="Enter recipient's full name" required>
+                                </label>
+                                <label for="">Age
+                                    <input type="number" name="age" placeholder="Enter recipient's age" required>
+                                </label>
+                            </div>
+                            <div class="blood_part">
+                                <label for="">Email 
+                                    <input type="email" name="email" placeholder="Enter recipient's email id" required>
+                                </label>
+                                <label for="">Contact Number 
+                                    <input type="text" name="contact_no" maxlength="10" placeholder="Enter recipient's contact number" required>
+                                </label>
+                            </div>
+                            <div class="blood_part">
+                                <label for="">Aadhar No 
+                                    <input type="text" name="aadhar" maxlength="12" placeholder="Enter recipient's aadhar no." required>
+                                </label>
+                                <label for="">Gender 
+                                    <select id="recipientGender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="blood_part">
+                                <label for="">Address
+                                    <input type="text" name="address" placeholder="Enter recipient's address" required>
+                                </label>
+                                <label for="">Pin Code
+                                    <input type="text" name="pin" maxlength="6" placeholder="Enter pin no" required>
+                                </label>
+                            </div>
+                            <button class="accept-button">Issue Blood</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
             <section id="profile">
                 <form action="/bank/dashboard/update/<%=bankdata.bank_id%>" id="update_profile" method="post">
                     <label for="Email">Email <br><br>
@@ -309,15 +475,13 @@
                     <button class="accept-button">Update Profile</button>
                 </form>
             </section>
-            <section id="reports">
-                hello
-            </section>
         </div>
     </div>
     <script>
         let date=new Date();
         document.getElementById('last_login').innerHTML ="Last Login : "+ date.toDateString()+" "+date.toTimeString().toString().substring(0,8);
         let donation=<%-JSON.stringify(donationdata||[])%>;
+        console.log(donation)
         let donor=<%-JSON.stringify(donordata||[])%>;
         let bank=<%-JSON.stringify(bankdata||{})%>;
         let inventory=<%-JSON.stringify(bloodInventory||[])%>;
@@ -541,12 +705,71 @@
             sections.forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
         }
+        function show_recepient(e){
+            document.getElementsByClassName('check_availability')[0].style.visibility = 'hidden';
+            document.getElementsByClassName('recipient_information')[0].style.visibility = 'visible';
+        }
+        function check_blood_back(){
+            document.querySelector(".process_btn button").style.opacity="0.5";
+            document.querySelector(".process_btn").style.cursor="not-allowed";
+            document.querySelector(".process_btn button").style.pointerEvents="none";
+            document.querySelector(".blood_info").style.display="none";
+            document.getElementsByClassName('check_availability')[0].style.visibility = 'visible';
+            document.getElementsByClassName('recipient_information')[0].style.visibility='hidden';
+        }
         function change() {
             let classdata=document.getElementsByClassName('fa-solid')[0].classList;
             classdata.toggle('fa-toggle-on');
             classdata.toggle('fa-toggle-off');
             document.getElementById('password_active').classList.toggle('password_box')
         }
+        document.getElementById('recipient_detail').addEventListener("submit",function(e){
+            e.preventDefault();
+            let quantity=document.querySelector("#blood_check #quantity").value;
+            let blood_group=document.querySelector("#blood_check #blood_type").value;
+            this.action=`/bank/recipient/${bank['bank_id']}/${blood_group}/${quantity}`
+            this.submit();
+        })
+        document.getElementById('blood_check').addEventListener('submit',function(e){
+            document.querySelector('.blood_info').innerHTML=""
+            e.preventDefault();
+            console.log(quantity.value,blood_type.value)
+            for(let key in inventory){
+                if(key==blood_type.value){
+                    document.querySelector('.blood_info').style.display="flex";
+                    let div=document.createElement('div');
+                    div.style.display="flex";
+                    div.style.justifyContent="space-between";
+                    let p=document.createElement('p');
+                    p.textContent="Available Blood : "+inventory[key]+" units";
+                    div.appendChild(p);
+                    p=document.createElement('p');
+                    p.textContent="Required Blood : "+quantity.value+" units";
+                    div.appendChild(p);
+                    let div1=document.createElement('div');
+                    div1.style.textAlign="center";
+                    if(inventory[key]>=quantity.value){
+                        document.querySelector(".process_btn").style.cursor="all";
+                        document.querySelector(".process_btn button").style.opacity="1";
+                        document.querySelector(".process_btn button").style.pointerEvents="all";
+                        div1.innerHTML=key+" blood group is available for recepient"
+                        document.querySelector('.blood_info').classList.add("blood_info_available")
+                        document.querySelector('.blood_info').classList.remove("blood_info_unavailable");
+                    }
+                    else{
+                        document.querySelector(".process_btn button").style.opacity="0.5";
+                        document.querySelector(".process_btn").style.cursor="not-allowed";
+                        document.querySelector(".process_btn button").style.pointerEvents="none";
+                        div1.innerHTML=key+" blood group is not available, Please check later.";
+                        document.querySelector('.blood_info').classList.remove("blood_info_available")
+                        document.querySelector('.blood_info').classList.add("blood_info_unavailable");
+                    }
+                    document.querySelector(".blood_info").appendChild(div);
+                    document.querySelector(".blood_info").appendChild(div1);
+                }
+            }
+            
+        })
         document.getElementById('update_profile').addEventListener('submit',function(e){
             e.preventDefault();
             if(password.value!=comfirm_password.value){
@@ -560,6 +783,7 @@
                 return
             //code to update profile
         })  
+
         document.addEventListener("DOMContentLoaded", function () {
             // Display dynamic values from data
             document.getElementById("total-blood-units").textContent = Object.values(inventory).reduce((a, b) => a + b, 0) + " units";

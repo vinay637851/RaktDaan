@@ -9,12 +9,12 @@ body{
 }
 .nav{
     width: 100vw;
-    padding: 0vw 1vw 0vw 4vw;
+    padding: 0vw 4vw;
     background-color: white;
     height: 8vh;
     position: sticky;
     top: 0vh;
-    z-index: 1;
+    z-index: 4;
     font-size: 15px;
     display: flex;
     justify-content: space-between;
@@ -23,16 +23,21 @@ body{
 }
 .logo{
     display: flex;
+    width: max-content;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    letter-spacing: 1px;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 .nav img{
     height:4vh;
 }
 .nav_title{
+    width: 100%;
     display: flex;
+    justify-content: right;
+    align-items: center;
     text-transform: uppercase;
 }
 .nav a{
@@ -63,19 +68,14 @@ body{
     padding: 0vh 1vh;
     width: max-content;
     display: flex;
-    flex-direction: column;
+    gap: 2vh;
     justify-content: center;
     align-items: center;
 }
 .login_part i{
-    font-size: 35px;
-    color:#007BFF;
-    cursor: pointer;
-}
-.login_part p{
     font-weight: 600;
-    text-transform: none;
-    font-size: 11px;
+    color:#237d76;
+    font-size: 28px;
 }
 .title_container p{
     font-weight: 600;
@@ -85,6 +85,7 @@ body{
 }
 .title_part i{
     color: white;
+    display: none;
     font-size: 20px;
 }
 .title_part:hover{
@@ -92,7 +93,7 @@ body{
     color: white;
 }
 .title_part:hover ul{
-    visibility: visible;
+    display: block;
     color: black;
     box-shadow: 0px 0px  10px rgba(0, 0, 0, 0.3);
 }
@@ -111,7 +112,7 @@ body{
     background-color: white;
     position:absolute;
     top: 8vh;
-    visibility: hidden;
+    display: none;
     z-index: 2;
 } 
 .title_part ul li{
@@ -133,6 +134,12 @@ body{
 .header-login-btn:hover{
     background: linear-gradient(135deg, #b30000,#ff1a1a);
 }
+.fa-bars{
+    font-size: 28px;
+    cursor: pointer;
+    display: none !important;
+}
+
 .footer{
     background-color: rgba(0, 0, 0, 0.9);
     width: 100vw;
@@ -196,4 +203,74 @@ body{
     background-color: grey;
     border-radius: 15px;
     border: 1px solid darkgray;
+}
+
+@media (max-width: 1000px) {
+    .nav_title{
+        display: none;
+    }
+    .fa-bars{
+        display: block !important;
+    }
+    .title_part ul{
+        position: relative;
+        top: 0vh;
+        width: 100%;
+        background-color: #1a504c;
+    }
+    .title_part:hover ul{
+        box-shadow: none;
+    }
+    .title_main{
+        color: black;
+    }
+    .title_container{
+        color: white;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .title_part ul li:hover{
+        background-color: #1a504c;
+        color: #A3E4DB;
+    }
+    .title_part ul li{
+        color: #A3E4DB;
+        padding-left: 3vw;
+    }
+    .title_part i{
+        display: block;
+    }
+    .title_part:hover i{
+        transform: rotateZ(-180deg);
+        transition: 0.2s linear;
+    }
+}
+@media screen and (min-width:1001px){
+    .fa-bars{
+        display: none;
+    }
+    .show{
+        display: none !important;
+    }
+    .nav_title{
+        display: flex;
+    }
+}
+@media (max-width:431px){
+    
+}
+.show{
+    display: flex;
+    width: 30vw;
+    background-color: #1a504c;
+    height: 92vh;
+    align-items: flex-start;
+    position: absolute;
+    flex-direction: column;
+    top: 8vh;
+    right: 0;
+}
+.show .title_part{
+    width: 100%;
+    height: max-content;
 }
